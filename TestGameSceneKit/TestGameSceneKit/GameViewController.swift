@@ -44,9 +44,7 @@ class GameViewController: UIViewController {
     let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
     
     // ship node rotation
-    ship.rotation = SCNVector4Make(0, 1, 0, 180 * Float(M_PI))
-    // TODO: ship の回転が反映されない
-    scene.rootNode.addChildNode(ship) // ?
+    ship.rotation = SCNVector4Make(0, 1, 0, Float(M_PI))
     
     // animate the 3d object
 //    ship.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
