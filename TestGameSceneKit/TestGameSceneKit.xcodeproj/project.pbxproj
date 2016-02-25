@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9A6D6B1C1C7F5065008E6FE4 /* stars.scnp in Resources */ = {isa = PBXBuildFile; fileRef = 9A6D6B1A1C7F5065008E6FE4 /* stars.scnp */; };
+		9A6D6B1D1C7F5065008E6FE4 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A6D6B1B1C7F5065008E6FE4 /* star.png */; };
 		9A80E0B01C7D2E9B00B54292 /* GameViewControllerOrg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A80E0AF1C7D2E9B00B54292 /* GameViewControllerOrg.swift */; };
 		9AE320311C7156140029E41E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE320301C7156140029E41E /* AppDelegate.swift */; };
 		9AE320331C7156140029E41E /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 9AE320321C7156140029E41E /* art.scnassets */; };
@@ -36,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9A6D6B1A1C7F5065008E6FE4 /* stars.scnp */ = {isa = PBXFileReference; lastKnownFileType = file.scp; path = stars.scnp; sourceTree = "<group>"; };
+		9A6D6B1B1C7F5065008E6FE4 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star.png; sourceTree = "<group>"; };
 		9A80E0AF1C7D2E9B00B54292 /* GameViewControllerOrg.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewControllerOrg.swift; sourceTree = "<group>"; };
 		9AE3202D1C7156140029E41E /* TestGameSceneKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestGameSceneKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AE320301C7156140029E41E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -106,6 +110,8 @@
 				9AE320341C7156140029E41E /* GameViewController.swift */,
 				9A80E0AF1C7D2E9B00B54292 /* GameViewControllerOrg.swift */,
 				9AE320361C7156140029E41E /* Main.storyboard */,
+				9A6D6B1A1C7F5065008E6FE4 /* stars.scnp */,
+				9A6D6B1B1C7F5065008E6FE4 /* star.png */,
 				9AE320391C7156140029E41E /* Assets.xcassets */,
 				9AE3203B1C7156140029E41E /* LaunchScreen.storyboard */,
 				9AE3203E1C7156140029E41E /* Info.plist */,
@@ -239,6 +245,8 @@
 				9AE3203D1C7156140029E41E /* LaunchScreen.storyboard in Resources */,
 				9AE3203A1C7156140029E41E /* Assets.xcassets in Resources */,
 				9AE320381C7156140029E41E /* Main.storyboard in Resources */,
+				9A6D6B1C1C7F5065008E6FE4 /* stars.scnp in Resources */,
+				9A6D6B1D1C7F5065008E6FE4 /* star.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
