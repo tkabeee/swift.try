@@ -49,6 +49,10 @@ class GameViewController: UIViewController {
     // animate the 3d object
 //    ship.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
 
+    // Stars Particle
+    let stars = SCNParticleSystem(named: "stars.scnp", inDirectory: "")!
+    scene.rootNode.addParticleSystem(stars)
+    
     // retrieve the SCNView
     let scnView = self.view as! SCNView
 
