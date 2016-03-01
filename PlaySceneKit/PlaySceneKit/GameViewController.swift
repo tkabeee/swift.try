@@ -44,15 +44,35 @@ class GameViewController: UIViewController {
     lightNode.name = "spotLight"
     scene.rootNode.addChildNode(lightNode)
   
-    // 床の設置と当たり判定の設定
-  
-  
+    // 床の設置
+    let floorGround = SCNFloor()
+    floorGround.firstMaterial?.diffuse.contents = UIColor.orangeColor()
+    
+    let floorNode = SCNNode()
+    floorNode.geometry = floorGround
+    floorNode.position = SCNVector3Make(0, 0, 0)
+    floorNode.name = "groundFloor"
+    
+    // 床への物体の当たり判定
+    floorNode.physicsBody = SCNPhysicsBody()
+    
+    scene.rootNode.addChildNode(floorNode)
+    
+    // 物体を発生
+    let generatorSphere = SCNSphere(radius: 4.0)
+    generatorSphere.firstMaterial?.diffuse.contents = UIColor(red: 0.3, green: 0.3, blue: 1, alpha: 0.7)
+    
+    let generatorNode = SCNNode()
+    generatorNode.geometry = generatorSphere
+    generatorNode.position = SCNVector3Make(0, 32, 0)
+    generatorNode.name = "generatorSphere"
+    generatorNode.castsShadow = false
+    
+    scene.rootNode.addChildNode(generatorNode)
+    
     // retrieve the SCNView
     let scnView = self.view as! SCNView
-  
-    // set the scene to the view
-    scnView.scene = scene
-  
+    
     // allows the user to manipulate the camera
     scnView.allowsCameraControl = true
     
@@ -60,11 +80,14 @@ class GameViewController: UIViewController {
     scnView.showsStatistics = true
     
     // configure the view
-    scnView.backgroundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0)
+    scnView.backgroundColor = UIColor(red: 0.8, green: 0.8, blue: 1.0, alpha: 1.0)
   
     // add a tap gesture recognizer
     let tapGesture = UITapGestureRecognizer(target: self, action: "handleTap:")
     scnView.addGestureRecognizer(tapGesture)
+
+    // set the scene to the view
+    scnView.scene = scene
   }
   
   func handleTap(gestureRecognize: UIGestureRecognizer) {
@@ -82,6 +105,8 @@ class GameViewController: UIViewController {
       
       // get its material
       let material = result.node!.geometry!.firstMaterial!
+      
+      // 球体タップ判定
       
       // highlight it
       SCNTransaction.begin()
