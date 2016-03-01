@@ -40,7 +40,7 @@ class GameViewController: UIViewController {
     lightNode.light!.spotOuterAngle = 180
     lightNode.light!.castsShadow = true
     lightNode.position = SCNVector3Make(0, 50, 0)
-    lightNode.rotation = SCNVector4Make(1, 0, 0, Float(M_PI_2))
+    lightNode.rotation = SCNVector4Make(1, 0, 0, -Float(M_PI_2))
     lightNode.name = "spotLight"
     scene.rootNode.addChildNode(lightNode)
   
@@ -54,7 +54,7 @@ class GameViewController: UIViewController {
     floorNode.name = "groundFloor"
     
     // 床への物体の当たり判定
-    floorNode.physicsBody = SCNPhysicsBody()
+    floorNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: nil)
     
     scene.rootNode.addChildNode(floorNode)
     
@@ -132,9 +132,64 @@ class GameViewController: UIViewController {
         
         SCNTransaction.commit()
         
-        // TODO: 新しい物体を生成
+        // 新しい物体を生成
+        self.createAnyGeometry()
       }
     }
+  }
+  
+  func createAnyGeometry() {
+
+    let rand_num = arc4random_uniform(5)
+
+    // create New Geometry
+    var geometry = SCNGeometry()
+
+    // ランダムで形状を決定する
+    switch (rand_num) {
+      case 0:
+        geometry = SCNPyramid(width: 4.5, height: 4.5, length: 4.5)
+        break
+
+      case 1:
+        geometry = SCNCylinder(radius: 2.0, height: 3.5)
+        break
+
+      case 2:
+        geometry = SCNSphere(radius: 2.0)
+        break
+
+      case 3:
+        geometry = SCNTorus(ringRadius: 2.5, pipeRadius: 1.0)
+        break
+
+      case 4:
+        geometry = SCNBox(width: 4.5, height: 4.5, length: 4.5, chamferRadius: 0.0)
+      
+      default:
+        geometry = SCNBox(width: 3.0, height: 3.0, length: 3.0, chamferRadius: 1.0)
+        break
+    }
+    
+    // ランダムで色を決定
+    geometry.firstMaterial?.diffuse.contents = UIColor(red: self.randomColorNumber(), green: self.randomColorNumber(), blue: self.randomColorNumber(), alpha: 1.0)
+    
+    // 形状の設定
+    let geometryNode = SCNNode(geometry: geometry)
+    geometryNode.position = SCNVector3Make(0.0, 30.0, 0.0)
+    geometryNode.name = "anyGeometry"
+    
+    // 重力の設定
+    geometryNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Dynamic, shape: nil)
+    
+    // シーンに追加
+    let scnView = self.view as! SCNView
+    scnView.scene!.rootNode.addChildNode(geometryNode)
+  }
+  
+  func randomColorNumber()-> CGFloat {
+    let color_number: Double = Double(arc4random_uniform(100))
+    return CGFloat(color_number / 200.0 + 0.5)
   }
   
   override func shouldAutorotate() -> Bool {
