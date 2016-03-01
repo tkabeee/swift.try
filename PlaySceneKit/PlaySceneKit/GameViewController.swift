@@ -107,24 +107,33 @@ class GameViewController: UIViewController {
       let material = result.node!.geometry!.firstMaterial!
       
       // 球体タップ判定
+      let hitResultNode = result.node
       
-      // highlight it
-      SCNTransaction.begin()
-      SCNTransaction.setAnimationDuration(0.5)
-      
-      // on completion - unhighlight
-      SCNTransaction.setCompletionBlock {
+      if (hitResultNode.name == "generatorSphere") {
+        
+        // カラー設定
+        let hitResultDefColor = material.emission.contents
+
+        // highlight it
         SCNTransaction.begin()
         SCNTransaction.setAnimationDuration(0.5)
+
+        // on completion - unhighlight
+        SCNTransaction.setCompletionBlock {
+          SCNTransaction.begin()
+          SCNTransaction.setAnimationDuration(0.5)
+          
+          material.emission.contents = hitResultDefColor
+          
+          SCNTransaction.commit()
+        }
         
-        material.emission.contents = UIColor.blackColor()
+        material.emission.contents = UIColor.redColor()
         
         SCNTransaction.commit()
+        
+        // TODO: 新しい物体を生成
       }
-      
-      material.emission.contents = UIColor.redColor()
-      
-      SCNTransaction.commit()
     }
   }
   
