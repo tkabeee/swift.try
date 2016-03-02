@@ -208,6 +208,24 @@ class GameViewController: UIViewController {
     return CGFloat(color_number / 200.0 + 0.5)
   }
   
+  func createStarFighterNode() {
+
+    let scene = SCNScene(named: "art.scnassets/ship.scn")!
+    let starFighterNode = scene.rootNode.childNodeWithName("ship", recursively: true)!
+
+    // モデルの初期設定
+    starFighterNode.position = SCNVector3Make(0.0, 10.0, 0.0)
+    starFighterNode.rotation = SCNVector4Make(0, 1, 0, Float(M_PI))
+    starFighterNode.name     = "shipMesh"
+    
+    // モデルに重力を追加
+    starFighterNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Dynamic, shape: nil)
+    
+    // シーンに追加
+    let scnView = self.view as! SCNView
+    scnView.scene!.rootNode.addChildNode(starFighterNode)
+  }
+  
   override func shouldAutorotate() -> Bool {
     return true
   }
