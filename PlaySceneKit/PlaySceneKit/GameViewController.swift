@@ -19,39 +19,45 @@ class GameViewController: UIViewController {
     let scene = SCNScene()
   
     // カメラ設置
-    let cameraNode = SCNNode()
-    cameraNode.camera = SCNCamera()
-    cameraNode.position = SCNVector3Make(0, 50, 30)
-    cameraNode.rotation = SCNVector4Make(1, 0, 0, -0.9)
+    let cameraNode          = SCNNode()
+    cameraNode.camera       = SCNCamera()
+//    cameraNode.position     = SCNVector3Make(0, 50, 30)
+    cameraNode.position     = SCNVector3Make(0, 18, 20)
+//    cameraNode.rotation     = SCNVector4Make(1, 0, 0, -0.9)
+    cameraNode.rotation     = SCNVector4Make(1, 0, 0, -0.4)
+    cameraNode.camera?.zFar = 300.0
+    
     scene.rootNode.addChildNode(cameraNode)
   
     // 光源設置
-    let ambientLightNode = SCNNode()
-    ambientLightNode.light = SCNLight()
-    ambientLightNode.light!.type = SCNLightTypeAmbient
+    let ambientLightNode          = SCNNode()
+    ambientLightNode.light        = SCNLight()
+    ambientLightNode.light!.type  = SCNLightTypeAmbient
     ambientLightNode.light!.color = UIColor.lightGrayColor()
+
     scene.rootNode.addChildNode(ambientLightNode)
   
     // 影をつける光源設定
-    let lightNode = SCNNode()
-    lightNode.light = SCNLight()
-    lightNode.light!.type = SCNLightTypeSpot
-    lightNode.light!.color = UIColor.whiteColor()
+    let lightNode                   = SCNNode()
+    lightNode.light                 = SCNLight()
+    lightNode.light!.type           = SCNLightTypeSpot
+    lightNode.light!.color          = UIColor.whiteColor()
     lightNode.light!.spotOuterAngle = 180
-    lightNode.light!.castsShadow = true
-    lightNode.position = SCNVector3Make(0, 50, 0)
-    lightNode.rotation = SCNVector4Make(1, 0, 0, -Float(M_PI_2))
-    lightNode.name = "spotLight"
+    lightNode.light!.castsShadow    = true
+    lightNode.position              = SCNVector3Make(0, 50, 0)
+    lightNode.rotation              = SCNVector4Make(1, 0, 0, -Float(M_PI_2))
+    lightNode.name                  = "spotLight"
+
     scene.rootNode.addChildNode(lightNode)
   
     // 床の設置
     let floorGround = SCNFloor()
     floorGround.firstMaterial?.diffuse.contents = UIColor.orangeColor()
     
-    let floorNode = SCNNode()
+    let floorNode      = SCNNode()
     floorNode.geometry = floorGround
     floorNode.position = SCNVector3Make(0, 0, 0)
-    floorNode.name = "groundFloor"
+    floorNode.name     = "groundFloor"
     
     // 床への物体の当たり判定
     floorNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: nil)
@@ -62,10 +68,10 @@ class GameViewController: UIViewController {
     let generatorSphere = SCNSphere(radius: 4.0)
     generatorSphere.firstMaterial?.diffuse.contents = UIColor(red: 0.3, green: 0.3, blue: 1, alpha: 0.7)
     
-    let generatorNode = SCNNode()
-    generatorNode.geometry = generatorSphere
-    generatorNode.position = SCNVector3Make(0, 32, 0)
-    generatorNode.name = "generatorSphere"
+    let generatorNode         = SCNNode()
+    generatorNode.geometry    = generatorSphere
+    generatorNode.position    = SCNVector3Make(0, 32, 0)
+    generatorNode.name        = "generatorSphere"
     generatorNode.castsShadow = false
     
     scene.rootNode.addChildNode(generatorNode)
