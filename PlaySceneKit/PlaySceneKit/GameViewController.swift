@@ -134,6 +134,16 @@ class GameViewController: UIViewController {
         
         // 新しい物体を生成
         self.createAnyGeometry()
+        
+      } else if (hitResultNode.name == "anyGeometry") {
+        
+        NSLog("remove: anyGeometry")
+        
+        // 物体のカラーを変更する
+        material.emission.contents = UIColor.redColor()
+        
+        // 物体を削除する
+        hitResultNode.runAction(SCNAction.sequence([SCNAction.fadeInWithDuration(0.2),SCNAction.removeFromParentNode()]))
       }
     }
   }
