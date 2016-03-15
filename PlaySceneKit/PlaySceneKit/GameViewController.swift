@@ -154,6 +154,7 @@ class GameViewController: UIViewController {
       } else if (hitResultNode.name == "groundFloor") {
 
         // 戦闘機を表示
+        self.removeStarFighterNode()
         self.createStarFighterNode()
 
       }
@@ -230,6 +231,17 @@ class GameViewController: UIViewController {
     // シーンに追加
     let scnView = self.view as! SCNView
     scnView.scene!.rootNode.addChildNode(starFighterNode)
+  }
+  
+  func removeStarFighterNode() {
+
+    let scnView = self.view as! SCNView
+
+    // Sceneに存在していたら削除
+    if let starFighterNode = scnView.scene!.rootNode.childNodeWithName("shipMesh", recursively: true) {
+      
+      starFighterNode.removeFromParentNode()
+    }
   }
   
   override func shouldAutorotate() -> Bool {
