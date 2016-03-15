@@ -105,7 +105,7 @@ class GameViewController: UIViewController {
     let hitResults = scnView.hitTest(p, options: nil)
 
     // check that we clicked on at least one object
-    if hitResults.count > 0 {
+    if (hitResults.count > 0) {
       // retrieved the first clicked object
       let result: AnyObject! = hitResults[0]
       
@@ -150,6 +150,12 @@ class GameViewController: UIViewController {
         
         // 物体を削除する
         hitResultNode.runAction(SCNAction.sequence([SCNAction.fadeInWithDuration(0.2),SCNAction.removeFromParentNode()]))
+        
+      } else if (hitResultNode.name == "groundFloor") {
+
+        // 戦闘機を表示
+        self.createStarFighterNode()
+
       }
     }
   }
