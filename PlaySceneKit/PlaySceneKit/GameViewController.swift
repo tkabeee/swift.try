@@ -96,6 +96,10 @@ class GameViewController: UIViewController {
     scnView.scene = scene
   }
   
+  /**
+   *
+   * タップイベント
+   */
   func handleTap(gestureRecognize: UIGestureRecognizer) {
     // retrieve the SCNView
     let scnView = self.view as! SCNView
@@ -161,6 +165,10 @@ class GameViewController: UIViewController {
     }
   }
   
+  /**
+   *
+   * 物体をランダムに生成してシーンに追加する
+   */
   func createAnyGeometry() {
 
     let rand_num = arc4random_uniform(5)
@@ -210,11 +218,19 @@ class GameViewController: UIViewController {
     scnView.scene!.rootNode.addChildNode(geometryNode)
   }
   
+  /**
+   *
+   * カラー番号をランダムに返す
+   */
   func randomColorNumber()-> CGFloat {
     let color_number: Double = Double(arc4random_uniform(100))
     return CGFloat(color_number / 200.0 + 0.5)
   }
   
+  /**
+   *
+   * 戦闘機を生成する
+   */
   func createStarFighterNode() {
 
     let scene = SCNScene(named: "art.scnassets/ship.scn")!
@@ -233,6 +249,10 @@ class GameViewController: UIViewController {
     scnView.scene!.rootNode.addChildNode(starFighterNode)
   }
   
+  /**
+   *
+   * 戦闘機が既に存在していた場合は、先に配置されている戦闘機を削除する
+   */
   func removeStarFighterNode() {
 
     let scnView = self.view as! SCNView
