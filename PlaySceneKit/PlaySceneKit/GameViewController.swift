@@ -119,6 +119,7 @@ class GameViewController: UIViewController {
       // 球体タップ判定
       let hitResultNode = result.node
       
+      // 球体をタップした場合
       if (hitResultNode.name == "generatorSphere") {
         
         // カラー設定
@@ -145,7 +146,10 @@ class GameViewController: UIViewController {
         // 新しい物体を生成
         self.createAnyGeometry()
         
-      } else if (hitResultNode.name == "anyGeometry") {
+      }
+      
+      // ランダムに生成された物体をタップした場合
+      if (hitResultNode.name == "anyGeometry") {
         
         NSLog("remove: anyGeometry")
         
@@ -155,12 +159,21 @@ class GameViewController: UIViewController {
         // 物体を削除する
         hitResultNode.runAction(SCNAction.sequence([SCNAction.fadeInWithDuration(0.2),SCNAction.removeFromParentNode()]))
         
-      } else if (hitResultNode.name == "groundFloor") {
+      }
+      
+      // フロアをタップした場合
+      if (hitResultNode.name == "groundFloor") {
 
         // 戦闘機を表示
         self.removeStarFighterNode()
         self.createStarFighterNode()
 
+      }
+      
+      // 戦闘機をタップした場合
+      if (hitResultNode.name == "shipMesh") {
+        
+        self.takeOffStarFighterNode()
       }
     }
   }
