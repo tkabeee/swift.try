@@ -289,6 +289,69 @@ class GameViewController: UIViewController {
     starFighterNode!.physicsBody!.applyForce(SCNVector3Make(0, 15, -80), impulse: true)
   }
   
+  /**
+   *
+   * ボックスを量産する
+   */
+  func createManyBoxNode() {
+    
+    self.removeBoxNode()
+    
+    let startPx: Double = -22.5;
+    let startPy: Double = 0.0;
+    let stepPx:  Double = 2.5;
+    let stepPy:  Double = 1.5;
+    
+    for (var px:Double = 0; px < 20; px++) {
+      for (var py:Double = 0; py < 10; py++) {
+        
+        let boxPx: Double = startPx + stepPx * px;
+        let boxPy: Double = startPy + stepPy * px;
+        
+        self.createBoxNode(SCNVector3(boxPx, boxPy + py * 1.5, -50))
+      }
+    }
+    
+  }
+  
+  /**
+   *
+   * ボックスを生成する
+   */
+  func createBoxNode(vector3: SCNVector3) {
+    
+    let boxGeometory = SCNBox(width: 2.5, height: 1.5, length: 4.5, chamferRadius: 0.0)
+    boxGeometory.firstMaterial?.diffuse.contents = UIColor(
+        red: self.randomColorNumber(),
+      green: self.randomColorNumber(),
+       blue: self.randomColorNumber(),
+      alpha: 1.0)
+    
+    let boxGeometoryNode = SCNNode(geometry: boxGeometory)
+    boxGeometoryNode.position    = vector3
+    boxGeometoryNode.name        = "boxGeometory"
+    boxGeometoryNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Dynamic, shape: nil)
+    boxGeometoryNode.physicsBody?.mass = CGFloat(0.01)
+    boxGeometoryNode.physicsBody?.restitution = CGFloat(0.2)
+    
+    let scnView = self.view as! SCNView
+    scnView.scene!.rootNode.addChildNode(boxGeometoryNode)
+  }
+  
+  /**
+   *
+   * ボックスを削除する
+   */
+  func removeBoxNode() {
+    
+    let scnView = self.view as! SCNView
+    
+    while let boxGeometoryNode = scnView.scene!.rootNode.childNodeWithName("boxGeometory", recursively: true) {
+      
+      boxGeometoryNode.removeFromParentNode()
+    }
+  }
+  
   override func shouldAutorotate() -> Bool {
     return true
   }
