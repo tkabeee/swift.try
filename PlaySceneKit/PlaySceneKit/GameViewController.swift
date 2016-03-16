@@ -277,6 +277,10 @@ class GameViewController: UIViewController {
     }
   }
   
+  /**
+   *
+   * 戦闘機をテイクオフさせる
+   */
   func takeOffStarFighterNode() {
 
     let scnView = self.view as! SCNView
