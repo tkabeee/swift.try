@@ -264,6 +264,14 @@ class GameViewController: UIViewController {
     }
   }
   
+  func takeOffStarFighterNode() {
+
+    let scnView = self.view as! SCNView
+    let starFighterNode = scnView.scene!.rootNode.childNodeWithName("shipMesh", recursively: true)
+    
+    starFighterNode!.physicsBody!.applyForce(SCNVector3Make(0, 15, -80), impulse: true)
+  }
+  
   override func shouldAutorotate() -> Bool {
     return true
   }
