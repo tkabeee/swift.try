@@ -19,39 +19,45 @@ class GameViewController: UIViewController {
     let scene = SCNScene()
   
     // カメラ設置
-    let cameraNode = SCNNode()
-    cameraNode.camera = SCNCamera()
-    cameraNode.position = SCNVector3Make(0, 50, 30)
-    cameraNode.rotation = SCNVector4Make(1, 0, 0, -0.9)
+    let cameraNode          = SCNNode()
+    cameraNode.camera       = SCNCamera()
+//    cameraNode.position     = SCNVector3Make(0, 50, 30)
+    cameraNode.position     = SCNVector3Make(0, 18, 20)
+//    cameraNode.rotation     = SCNVector4Make(1, 0, 0, -0.9)
+    cameraNode.rotation     = SCNVector4Make(1, 0, 0, -0.4)
+    cameraNode.camera?.zFar = 300.0
+    
     scene.rootNode.addChildNode(cameraNode)
   
     // 光源設置
-    let ambientLightNode = SCNNode()
-    ambientLightNode.light = SCNLight()
-    ambientLightNode.light!.type = SCNLightTypeAmbient
+    let ambientLightNode          = SCNNode()
+    ambientLightNode.light        = SCNLight()
+    ambientLightNode.light!.type  = SCNLightTypeAmbient
     ambientLightNode.light!.color = UIColor.lightGrayColor()
+
     scene.rootNode.addChildNode(ambientLightNode)
   
     // 影をつける光源設定
-    let lightNode = SCNNode()
-    lightNode.light = SCNLight()
-    lightNode.light!.type = SCNLightTypeSpot
-    lightNode.light!.color = UIColor.whiteColor()
+    let lightNode                   = SCNNode()
+    lightNode.light                 = SCNLight()
+    lightNode.light!.type           = SCNLightTypeSpot
+    lightNode.light!.color          = UIColor.whiteColor()
     lightNode.light!.spotOuterAngle = 180
-    lightNode.light!.castsShadow = true
-    lightNode.position = SCNVector3Make(0, 50, 0)
-    lightNode.rotation = SCNVector4Make(1, 0, 0, -Float(M_PI_2))
-    lightNode.name = "spotLight"
+    lightNode.light!.castsShadow    = true
+    lightNode.position              = SCNVector3Make(0, 50, 0)
+    lightNode.rotation              = SCNVector4Make(1, 0, 0, -Float(M_PI_2))
+    lightNode.name                  = "spotLight"
+
     scene.rootNode.addChildNode(lightNode)
   
     // 床の設置
     let floorGround = SCNFloor()
     floorGround.firstMaterial?.diffuse.contents = UIColor.orangeColor()
     
-    let floorNode = SCNNode()
+    let floorNode      = SCNNode()
     floorNode.geometry = floorGround
     floorNode.position = SCNVector3Make(0, 0, 0)
-    floorNode.name = "groundFloor"
+    floorNode.name     = "groundFloor"
     
     // 床への物体の当たり判定
     floorNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: nil)
@@ -62,10 +68,10 @@ class GameViewController: UIViewController {
     let generatorSphere = SCNSphere(radius: 4.0)
     generatorSphere.firstMaterial?.diffuse.contents = UIColor(red: 0.3, green: 0.3, blue: 1, alpha: 0.7)
     
-    let generatorNode = SCNNode()
-    generatorNode.geometry = generatorSphere
-    generatorNode.position = SCNVector3Make(0, 32, 0)
-    generatorNode.name = "generatorSphere"
+    let generatorNode         = SCNNode()
+    generatorNode.geometry    = generatorSphere
+    generatorNode.position    = SCNVector3Make(0, 32, 0)
+    generatorNode.name        = "generatorSphere"
     generatorNode.castsShadow = false
     
     scene.rootNode.addChildNode(generatorNode)
@@ -90,6 +96,10 @@ class GameViewController: UIViewController {
     scnView.scene = scene
   }
   
+  /**
+   *
+   * タップイベント
+   */
   func handleTap(gestureRecognize: UIGestureRecognizer) {
     // retrieve the SCNView
     let scnView = self.view as! SCNView
@@ -99,7 +109,8 @@ class GameViewController: UIViewController {
     let hitResults = scnView.hitTest(p, options: nil)
 
     // check that we clicked on at least one object
-    if hitResults.count > 0 {
+    if (hitResults.count > 0) {
+      
       // retrieved the first clicked object
       let result: AnyObject! = hitResults[0]
       
@@ -109,6 +120,7 @@ class GameViewController: UIViewController {
       // 球体タップ判定
       let hitResultNode = result.node
       
+      // 球体をタップした場合
       if (hitResultNode.name == "generatorSphere") {
         
         // カラー設定
@@ -135,7 +147,10 @@ class GameViewController: UIViewController {
         // 新しい物体を生成
         self.createAnyGeometry()
         
-      } else if (hitResultNode.name == "anyGeometry") {
+      }
+      
+      // ランダムに生成された物体をタップした場合
+      if (hitResultNode.name == "anyGeometry") {
         
         NSLog("remove: anyGeometry")
         
@@ -144,10 +159,35 @@ class GameViewController: UIViewController {
         
         // 物体を削除する
         hitResultNode.runAction(SCNAction.sequence([SCNAction.fadeInWithDuration(0.2),SCNAction.removeFromParentNode()]))
+        
       }
+      
+      // フロアをタップした場合
+      if (hitResultNode.name == "groundFloor") {
+
+        // 戦闘機を表示
+        self.removeStarFighterNode()
+        self.createStarFighterNode()
+
+      }
+      
+      // 戦闘機をタップした場合
+      if (hitResultNode.name == "shipMesh") {
+        
+        self.takeOffStarFighterNode()
+      }
+
+    } else {
+      
+      self.removeBoxNode()
+      self.createManyBoxNode()
     }
   }
   
+  /**
+   *
+   * 物体をランダムに生成してシーンに追加する
+   */
   func createAnyGeometry() {
 
     let rand_num = arc4random_uniform(5)
@@ -197,9 +237,125 @@ class GameViewController: UIViewController {
     scnView.scene!.rootNode.addChildNode(geometryNode)
   }
   
+  /**
+   *
+   * カラー番号をランダムに返す
+   */
   func randomColorNumber()-> CGFloat {
     let color_number: Double = Double(arc4random_uniform(100))
     return CGFloat(color_number / 200.0 + 0.5)
+  }
+  
+  /**
+   *
+   * 戦闘機を生成する
+   */
+  func createStarFighterNode() {
+
+    let scene = SCNScene(named: "art.scnassets/ship.scn")!
+    let starFighterNode = scene.rootNode.childNodeWithName("ship", recursively: true)!
+
+    // モデルの初期設定
+    starFighterNode.position = SCNVector3Make(0.0, 10.0, 0.0)
+    starFighterNode.rotation = SCNVector4Make(0, 1, 0, Float(M_PI))
+    starFighterNode.name     = "shipMesh"
+    
+    // モデルに重力を追加
+    starFighterNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Dynamic, shape: nil)
+    
+    // シーンに追加
+    let scnView = self.view as! SCNView
+    scnView.scene!.rootNode.addChildNode(starFighterNode)
+  }
+  
+  /**
+   *
+   * 戦闘機が既に存在していた場合は、先に配置されている戦闘機を削除する
+   */
+  func removeStarFighterNode() {
+
+    let scnView = self.view as! SCNView
+
+    // Sceneに存在していたら削除
+    if let starFighterNode = scnView.scene!.rootNode.childNodeWithName("shipMesh", recursively: true) {
+      
+      starFighterNode.removeFromParentNode()
+    }
+  }
+  
+  /**
+   *
+   * 戦闘機をテイクオフさせる
+   */
+  func takeOffStarFighterNode() {
+
+    let scnView = self.view as! SCNView
+    let starFighterNode = scnView.scene!.rootNode.childNodeWithName("shipMesh", recursively: true)
+    
+    starFighterNode!.physicsBody!.applyForce(SCNVector3Make(0, 15, -80), impulse: true)
+  }
+  
+  /**
+   *
+   * ボックスを量産する
+   */
+  func createManyBoxNode() {
+    
+    self.removeBoxNode()
+    
+    let startPx: Double = -22.5;
+    let startPy: Double = 0.0;
+    let stepPx:  Double = 2.5;
+    let stepPy:  Double = 1.5;
+    
+    for (var px:Double = 0; px < 20; px++) {
+      for (var py:Double = 0; py < 10; py++) {
+        
+        let boxPx: Double = startPx + stepPx * px;
+        let boxPy: Double = startPy + stepPy * py;
+        
+        self.createBoxNode(SCNVector3(boxPx, boxPy + py * 1.5, -75))
+      }
+    }
+    
+  }
+  
+  /**
+   *
+   * ボックスを生成する
+   */
+  func createBoxNode(vector3: SCNVector3) {
+    
+    let boxGeometory = SCNBox(width: 2.5, height: 1.5, length: 4.5, chamferRadius: 0.0)
+    boxGeometory.firstMaterial?.diffuse.contents = UIColor(
+        red: self.randomColorNumber(),
+      green: self.randomColorNumber(),
+       blue: self.randomColorNumber(),
+      alpha: 1.0)
+    
+    let boxGeometoryNode = SCNNode(geometry: boxGeometory)
+    boxGeometoryNode.position    = vector3
+    boxGeometoryNode.name        = "boxGeometory"
+    boxGeometoryNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Dynamic, shape: nil)
+    boxGeometoryNode.physicsBody?.mass = CGFloat(0.01)
+    boxGeometoryNode.physicsBody?.restitution = CGFloat(0.2)
+    
+    let scnView = self.view as! SCNView
+    scnView.scene!.rootNode.addChildNode(boxGeometoryNode)
+  }
+  
+  /**
+   *
+   * ボックスを削除する
+   */
+  func removeBoxNode() {
+    
+    let scnView = self.view as! SCNView
+    
+    while let boxGeometoryNode = scnView.scene!.rootNode.childNodeWithName("boxGeometory", recursively: true) {
+      
+      boxGeometoryNode.removeFromParentNode()
+    }
   }
   
   override func shouldAutorotate() -> Bool {
