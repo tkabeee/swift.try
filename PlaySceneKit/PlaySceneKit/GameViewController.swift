@@ -110,6 +110,7 @@ class GameViewController: UIViewController {
 
     // check that we clicked on at least one object
     if (hitResults.count > 0) {
+      
       // retrieved the first clicked object
       let result: AnyObject! = hitResults[0]
       
@@ -175,6 +176,11 @@ class GameViewController: UIViewController {
         
         self.takeOffStarFighterNode()
       }
+
+    } else {
+      
+      self.removeBoxNode()
+      self.createManyBoxNode()
     }
   }
   
@@ -306,9 +312,9 @@ class GameViewController: UIViewController {
       for (var py:Double = 0; py < 10; py++) {
         
         let boxPx: Double = startPx + stepPx * px;
-        let boxPy: Double = startPy + stepPy * px;
+        let boxPy: Double = startPy + stepPy * py;
         
-        self.createBoxNode(SCNVector3(boxPx, boxPy + py * 1.5, -50))
+        self.createBoxNode(SCNVector3(boxPx, boxPy + py * 1.5, -75))
       }
     }
     
