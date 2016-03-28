@@ -14,7 +14,22 @@ class GameViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-  
+ 
+    // ストップボタン作成
+    let stopButton = UIButton()
+    
+    stopButton.frame = CGRectMake(0, 0, 30, 30)
+    stopButton.backgroundColor = UIColor.redColor()
+    stopButton.layer.masksToBounds = true
+    stopButton.layer.cornerRadius = 12.0
+    stopButton.layer.position = CGPoint(x: self.view.frame.width/2, y: 600)
+    stopButton.tag = 1
+    
+    // ストップボタンにイベントを追加
+    stopButton.addTarget(self, action: "handleTapStopButton:", forControlEvents: .TouchUpInside)
+    
+    self.view.addSubview(stopButton)
+    
     // シーン生成
     let scene = SCNScene()
   
@@ -95,7 +110,15 @@ class GameViewController: UIViewController {
     // set the scene to the view
     scnView.scene = scene
   }
-  
+
+  internal func handleTapStopButton(sender: UIButton) {
+
+    let scnView = self.view as! SCNView
+    let starFighterNode = scnView.scene!.rootNode.childNodeWithName("shipMesh", recursively: true)
+    
+    starFighterNode!.physicsBody!.velocity = SCNVector3Make(0, 0, 0)
+  }
+
   /**
    *
    * タップイベント
